@@ -13,16 +13,6 @@ XY = Tuple[np.ndarray, np.ndarray]
 XYList = List[XY]
 PartitionedDataset = List[Tuple[XY, XY]]
 
-def train_val_dataset(dataset, val_split=0.20):
-    train_idx, val_idx = train_test_split(list(range(len(dataset))), test_size=val_split)
-    test_idx, val_idx = train_test_split(val_idx, test_size=0.5)
-    datasets = {}
-    train_dataset = Subset(dataset, train_idx)
-    test_dataset = Subset(dataset, val_idx)
-    valid_dataset = Subset(dataset, test_idx)
-    return train_dataset, test_dataset, valid_dataset
-
-
 def cifar_to_numpy() -> Tuple[XY, XY]:
     """Download dataset from torchvision and convert it to numpy array."""
     transform = transforms.Compose(
@@ -39,9 +29,6 @@ def cifar_to_numpy() -> Tuple[XY, XY]:
     # convert data shape from 32x32x3 to 3x32x32 by transpose
     xy_train = trainset.data.transpose(0, 3, 1, 2), np.array(trainset.targets)
     xy_test = testset.data.transpose(0, 3, 1, 2), np.array(testset.targets)
-
-    print("xy_train shape is:", xy_train[0].shape, xy_train[1].shape)
-    print("xy_test shape is:", xy_test[0].shape, xy_test[1].shape)
 
     return xy_train, xy_test
 
